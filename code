@@ -1,49 +1,54 @@
 from collections import Counter
 import string
+
 check = True
+
+
+def name_name(nam):
+    fall = 0
+    for i in sym:
+        if i in nam:
+            for j in range(len(nam) - 1):
+                #checking if ending and beggoing has special symbols or name has any consecutive symbols in it
+                if nam[j] == nam[j + 1] == i or (nam[0] == i or nam[-1] == i):
+                    fall += 1
+    return fall
+
+
+def domain_name(do_nam, nam):
+    fall = name_name(nam)
+    if fall == 0:
+        alph = ["-", "."]
+        for i in alph:
+            for j in range(len(domain) - 1):
+                if i in domain:
+                    #checking if domain name has consecutive symbols and symbols at ending and begining
+                    if (domain[0] == i or domain[-1] == i) or domain[j] == domain[j + 1] == i:
+                        fall += 1
+    return fall
+
+
 while check:
     user = input("enter mail")
-    #counter is used to count each every element in string and stores that count value as dictionery value
+    # counter is used to count each every element in string and stores that count value as dictionery value
     count = Counter(user)
-    fall = 0
     if count["@"] == 1 and count["."] >= 1:
         user1 = user.split("@")
         name = user1[0]
         count2 = Counter(name)
-        #spilting the part aftter @ into domain and top_domain by using split
+        # spilting the part aftter @ into domain and top_domain by using split
         domain = user1[1][::-1].split(".", 1)[1][::-1]
         top_dom = user1[1][::-1].split(".", 1)[0][::-1]
-        #name of email can contain symbols so to import them we used string module and punctuation
+        # name of email can contain symbols so to import them we used string module and punctuation
         sym = string.punctuation
-        #we are creating alpha and alpha2 for checking name and domain name in email ,name of email can caontain a-z,A-Z,0-9 and symbols,domain name of email can contain a-z,A-Z,0-9 and ".","-"
+        # we are creating alpha and alpha2 for checking name and domain name in email ,name of email can caontain a-z,A-Z,0-9 and symbols,domain name of email can contain a-z,A-Z,0-9 and ".","-"
         alpha2 = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-")
         alpha = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV\"WXYZ0123456789!#$%&'()*+,-./:;<=>?@[\]^_`{|}~")
         if (0 < len(name) <= 64) and (0 < len(domain) <= 253) and (len(top_dom) == 3) and (
                 top_dom == "com" or top_dom == "net" or top_dom == "org") and set(
-                name).issubset(alpha) and set(domain).issubset(alpha2):
-            for i in sym:
-                if count2[i] >= 2:
-                    for j in range(len(name) - 1):
-                        #checking if special symbols are repeated consecutively
-                        if name[j] == name[j + 1] == i:
-                            fall += 1
-                        else:
-                            #checking if special symbols are at the end or beginning of the name
-                            if name[0] == i or name[-1] == i:
-                                fall += 1
-            if fall == 0:
-                alph = ["-", "."]
-                for i in alph:
-                    if i in domain:
-                        #checking if "-" or "." are at the beginning and end of domain name
-                        if domain[0] == i or domain[-1] == i:
-                            fall += 1
-                        else:
-                            for j in range(len(domain) - 1):
-                                #checking if "-" or "." are repeated consecutively
-                                if domain[j] == domain[j + 1] == i:
-                                    fall += 1
-            if fall == 0:
+            name).issubset(alpha) and set(domain).issubset(alpha2):
+
+            if domain_name(domain, name) == 0:
                 print("valid mail")
             else:
                 print("invalid mail")
