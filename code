@@ -33,7 +33,7 @@ while check:
     # counter is used to count each every element in string and stores that count value as dictionery value
     count = Counter(user)
     if count["@"] == 1 and count["."] >= 1:
-        user1 = user.split("@")
+        user1 = user.split("@",1)
         name = user1[0]
         count2 = Counter(name)
         # spilting the part aftter @ into domain and top_domain by using split
